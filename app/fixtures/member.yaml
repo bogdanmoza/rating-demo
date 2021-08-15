@@ -1,0 +1,4 @@
+App\Entity\Member:
+    member_{1..10}:
+      username: <userName()>
+      password: <password()>

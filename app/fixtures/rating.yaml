@@ -1,0 +1,6 @@
+App\Entity\Rating:
+  rating_{1..20}:
+    score: <numberBetween(1,5)>
+    comment: <paragraph()>
+    project: '@project_*'
+    created: <dateTime()>

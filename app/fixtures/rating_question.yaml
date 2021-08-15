@@ -1,0 +1,5 @@
+App\Entity\RatingQuestion:
+  ratingquestion_{1..20}:
+    score: <numberBetween(1,5)>
+    rating: '@rating_*'
+    question: '@question_*'

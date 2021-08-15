@@ -1,0 +1,4 @@
+App\Entity\Question:
+  question_{1..3}:
+    title: <title()>
+    description: '<sentence()>'

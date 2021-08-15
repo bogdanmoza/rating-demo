@@ -1,0 +1,4 @@
+App\Entity\Vico:
+  vico_{1..30}:
+    name: <name()>
+    created: <dateTime()>
