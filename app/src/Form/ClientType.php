@@ -21,7 +21,6 @@ class ClientType extends AbstractType
             ->add('firstName', TextType::class)
             ->add('lastName', TextType::class)
             ->add('plainPassword', PasswordType::class, [
-                'mapped' => false,
                 'constraints' => [
                     new Length([
                         'min' => 6,

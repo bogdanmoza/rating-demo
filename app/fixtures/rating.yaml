@@ -2,5 +2,5 @@ App\Entity\Rating:
   rating_{1..20}:
     score: <numberBetween(1,5)>
     comment: <paragraph()>
-    project: '@project_*'
+    vico: '@vico_*'
     created: <dateTime()>

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Entity\Project;
 use App\Entity\Rating;
+use App\Entity\Vico;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -21,8 +21,8 @@ class RatingType extends AbstractType
         $builder
             ->add('score', NumberType::class)
             ->add('comment', TextType::class)
-            ->add('project', EntityType::class, [
-                'class' => Project::class
+            ->add('vico', EntityType::class, [
+                'class' => Vico::class
             ])
             ->add('ratingQuestions', CollectionType::class, [
                 'entry_type'    => RatingQuestionType::class,

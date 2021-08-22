@@ -1,4 +1,11 @@
 App\Entity\Member:
-    member_{1..10}:
-      username: <userName()>
-      password: <password()>
+  member_1:
+    username (unique): admin@gmail.com
+    password: <passwordHasher("App\Entity\Member", "1q2w3e4r")>
+    name: <name()>
+    memberRoles: ['@role_1']
+  member_{2..10}:
+    username (unique): <email()>
+    password: <passwordHasher("App\Entity\Member", "1q2w3e4r")>
+    name: <name()>
+    memberRoles: ['@role_2']

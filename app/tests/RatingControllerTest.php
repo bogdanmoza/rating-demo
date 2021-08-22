@@ -2,10 +2,10 @@
 
 namespace App\Tests;
 
-use App\Entity\Project;
 use App\Entity\Question;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use App\Entity\Rating;
+use App\Entity\Vico;
 
 class RatingControllerTest extends AbstractTestCase
 {
@@ -37,7 +37,7 @@ class RatingControllerTest extends AbstractTestCase
         $this->client->request('POST', '/api/rating', [], [], [], json_encode([
             'score'     => 4,
             'comment'   => 'test_comment',
-            'project'   => $this->em->getRepository(Project::class)->findOneBy([])->getId(),
+            'vico'      => $this->em->getRepository(Vico::class)->findOneBy([])->getId(),
             'ratingQuestions' => [
                 [
                     'score' => 3,
@@ -71,7 +71,7 @@ class RatingControllerTest extends AbstractTestCase
         $this->client->request('PUT', "/api/rating/{$randomRating->getId()}", [], [], [], json_encode([
             'score'     => 4,
             'comment'   => 'test_put_comment',
-            'project'   => $this->em->getRepository(Project::class)->findOneBy([])->getId(),
+            'vico'      => $this->em->getRepository(Vico::class)->findOneBy([])->getId(),
             'ratingQuestions' => [
                 [
                     'score' => 3,

@@ -33,7 +33,7 @@ class ClientControllerTest extends AbstractTestCase
     public function testCreate(): void
     {
         $this->client->request('POST', '/api/client', [], [], [], json_encode([
-            'username'      => 'test_create',
+            'username'      => 'test_create_client@gmail.com',
             'plainPassword' => 'random',
             'firstName'     => 'Firstname',
             'lastName'      => 'Lastname'
@@ -42,27 +42,27 @@ class ClientControllerTest extends AbstractTestCase
         $content = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertResponseStatusCodeSame(201);
         $this->assertIsArray($content);
-        $this->assertContains('test_create', $content);
+        $this->assertContains('test_create_client@gmail.com', $content);
     }
 
     public function testPatch(): void
     {
         $randomClient = $this->em->getRepository(Client::class)->findOneBy([]);
         $this->client->request('PATCH', "/api/client/{$randomClient->getId()}", [], [], [], json_encode([
-            'username'      => 'test_patch',
+            'username'      => 'test_patch_client@gmail.com',
         ]));
         $this->assertJson($this->client->getResponse()->getContent());
         $content = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertResponseIsSuccessful();
         $this->assertIsArray($content);
-        $this->assertContains('test_patch', $content);
+        $this->assertContains('test_patch_client@gmail.com', $content);
     }
 
     public function testPut(): void
     {
         $randomClient = $this->em->getRepository(Client::class)->findOneBy([]);
         $this->client->request('PUT', "/api/client/{$randomClient->getId()}", [], [], [], json_encode([
-            'username'      => 'test_put',
+            'username'      => 'test_put_client@gmail.com',
             'plainPassword' => 'random',
             'firstName'     => 'Firstname',
             'lastName'      => 'Lastname'
@@ -71,7 +71,7 @@ class ClientControllerTest extends AbstractTestCase
         $content = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertResponseIsSuccessful();
         $this->assertIsArray($content);
-        $this->assertContains('test_put', $content);
+        $this->assertContains('test_put_client@gmail.com', $content);
     }
 
     public function testDelete(): void

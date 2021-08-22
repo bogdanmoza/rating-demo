@@ -1,7 +1,13 @@
 App\Entity\Client:
-    client_{1..10}:
-      username: <userName()>
-      password: <password()>
-      created: <dateTime()>
-      firstName: <firstName()>
-      lastName: <lastName()>
+  client_1:
+    username (unique): client@gmail.com
+    password: <passwordHasher("App\Entity\Client", "1q2w3e4r")>
+    created: <dateTime()>
+    firstName: <firstName()>
+    lastName: <lastName()>
+  client_{2..10}:
+    username (unique): <email()>
+    password: <passwordHasher("App\Entity\Client", "1q2w3e4r")>
+    created: <dateTime()>
+    firstName: <firstName()>
+    lastName: <lastName()>

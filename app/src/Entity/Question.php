@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Model\AbstractEntityRouterLoader;
 use App\Repository\QuestionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -15,44 +16,51 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * @ORM\Entity(repositoryClass=QuestionRepository::class)
  */
-class Question
+class Question extends AbstractEntityRouterLoader
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid", nullable=false)
+     *
      * @Serializer\Groups({"list", "rating_list"})
      */
     private ?string $id;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=false)
+     *
      * @Assert\NotBlank
      * @Assert\Type("string")
      * @Assert\Length(min=5, max=50)
+     *
      * @Serializer\Groups({"list"})
      */
-    private string $title;
+    private ?string $title;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=false)
+     *
      * @Assert\NotBlank
      * @Assert\Type("string")
      * @Assert\Length(min=5, max=100)
+     *
      * @Serializer\Groups({"list"})
      */
-    private string $description;
+    private ?string $description;
 
     /**
      * @ORM\OneToMany(targetEntity=RatingQuestion::class, mappedBy="question", orphanRemoval=true)
+     *
      * @Serializer\Exclude
      */
     private $ratingQuestions;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Serializer\Groups({"list"})
      * @Gedmo\Timestampable
+     *
+     * @Serializer\Groups({"list"})
      */
     private \DateTime $created;
 
@@ -71,7 +79,7 @@ class Question
         return $this->title;
     }
 
-    public function setTitle(string $title): self
+    public function setTitle(?string $title): self
     {
         $this->title = $title;
 
@@ -83,7 +91,7 @@ class Question
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
@@ -110,11 +118,9 @@ class Question
 
     public function removeRatingQuestion(RatingQuestion $ratingQuestion): self
     {
-        if ($this->ratingQuestions->removeElement($ratingQuestion)) {
+        if ($this->ratingQuestions->removeElement($ratingQuestion) && $ratingQuestion->getQuestion() === $this) {
             // set the owning side to null (unless already changed)
-            if ($ratingQuestion->getQuestion() === $this) {
-                $ratingQuestion->setQuestion(null);
-            }
+            $ratingQuestion->setQuestion(null);
         }
 
         return $this;

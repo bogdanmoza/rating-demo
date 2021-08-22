@@ -1,0 +1,9 @@
+App\Entity\Role:
+  role_1:
+    name: ROLE_ADMIN
+    description: "Admin"
+    created: <dateTime()>
+  role_2:
+    name: ROLE_CREATOR
+    description: "Creator"
+    created: <dateTime()>

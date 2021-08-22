@@ -18,8 +18,8 @@ class MemberType extends AbstractType
     {
         $builder
             ->add('username', TextType::class)
+            ->add('name', TextType::class)
             ->add('plainPassword', PasswordType::class, [
-                'mapped' => false,
                 'constraints' => [
                     new Length([
                         'min' => 6,

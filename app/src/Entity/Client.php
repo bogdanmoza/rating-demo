@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Model\AbstractEntityRouterLoader;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ClientRepository;
-use Nelmio\ApiDocBundle\Annotation\Model;
-use OpenApi\Annotations as OA;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation as Serializer;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 /**
  * Client
- * @OA\Schema()
  * @ORM\Table(name="client", uniqueConstraints={
  *     @ORM\UniqueConstraint(
  *         name="UNIQ_USERNAME",
@@ -29,86 +29,131 @@ use JMS\Serializer\Annotation as Serializer;
  *     message="The username already exists!"
  * )
  */
-class Client
+class Client extends AbstractEntityRouterLoader implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid", nullable=false)
-     * @OA\Property(description="The unique identifier.")
+     *
      * @Serializer\Groups({"list"})
      */
     private ?string $id;
 
     /**
      * @ORM\Column(name="username", type="string", length=128, nullable=false, options={"comment"="Email as the username"})
-     * @OA\Property(type="string", maxLength=128)
+     *
      * @Assert\NotBlank
      * @Assert\Type("string")
-     * @Assert\Length(max="128")
+     * @Assert\Length(max=128)
+     * @Assert\Email
+     *
      * @Serializer\Groups({"list"})
      */
-    private string $username;
+    private ?string $username;
+
+    /**
+     * @ORM\Column(type="json")
+     *
+     * @Serializer\Exclude
+     */
+    private array $roles = ['ROLE_CLIENT'];
 
     /**
      * @ORM\Column(name="password", type="string", length=96, nullable=false, options={"comment"="Use password hash with BCRYPT"})
+     *
      * @Serializer\Exclude
      */
     private string $password;
 
     /**
      * @ORM\Column(name="created", type="datetime", nullable=false)
-     * @OA\Property(type="datetime")
      * @Gedmo\Timestampable
+     *
      * @Serializer\Groups({"list"})
      */
     private \DateTime $created;
 
     /**
      * @ORM\Column(name="first_name", type="string", length=96, nullable=false)
-     * @OA\Property(type="string", maxLength=96)
+     *
      * @Assert\NotBlank
      * @Assert\Type("string")
-     * @Assert\Length(max="96")
+     * @Assert\Length(max=96)
+     *
      * @Serializer\Groups({"list"})
      */
-    private string $firstName;
+    private ?string $firstName;
 
     /**
      * @ORM\Column(name="last_name", type="string", length=96, nullable=false)
-     * @OA\Property(type="string", maxLength=96)
+     *
      * @Assert\NotBlank
      * @Assert\Type("string")
-     * @Assert\Length(max="128")
+     * @Assert\Length(max=128)
+     *
      * @Serializer\Groups({"list"})
      */
-    private string $lastName;
+    private ?string $lastName;
+
+    /**
+     * @Assert\NotBlank
+    */
+    private ?string $plainPassword;
 
     public function getId(): ?string
     {
         return $this->id;
     }
 
-    public function getUsername(): string
+    public function getUserIdentifier(): ?string
     {
-        return $this->username;
+        return (string) $this->username;
     }
 
-    public function setUsername(string $username): self
+    public function getRoles(): array
     {
-        $this->username = $username;
+        return $this->roles;
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
 
         return $this;
     }
 
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(?string $password): self
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function getSalt(): ?string
+    {
+        return null;
+    }
+
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(?string $username): self
+    {
+        $this->username = $username;
 
         return $this;
     }
@@ -125,26 +170,38 @@ class Client
         return $this;
     }
 
-    public function getFirstName(): string
+    public function getFirstName(): ?string
     {
         return $this->firstName;
     }
 
-    public function setFirstName(string $firstName): self
+    public function setFirstName(?string $firstName): self
     {
         $this->firstName = $firstName;
 
         return $this;
     }
 
-    public function getLastName(): string
+    public function getLastName(): ?string
     {
         return $this->lastName;
     }
 
-    public function setLastName(string $lastName): self
+    public function setLastName(?string $lastName): self
     {
         $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
 
         return $this;
     }

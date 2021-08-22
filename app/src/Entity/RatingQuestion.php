@@ -24,28 +24,34 @@ class RatingQuestion
 
     /**
      * @ORM\Column(type="integer", nullable=false)
-     * @Serializer\Groups({"list"})
+     *
      * @Assert\NotBlank
      * @Assert\Type("integer")
      * @Assert\Range(max=5)
+     *
+     * @Serializer\Groups({"list"})
      */
-    private int $score;
+    private ?int $score;
 
     /**
      * @ORM\ManyToOne(targetEntity=Rating::class, inversedBy="ratingQuestions", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
-     * @Serializer\Groups({"question_list"})
+     *
      * @Assert\NotBlank
+     *
+     * @Serializer\Groups({"question_list"})
      */
     private ?Rating $rating;
 
     /**
      * @ORM\ManyToOne(targetEntity=Question::class, inversedBy="ratingQuestions", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
-     * @Serializer\Groups({"rating_list"})
+     *
      * @Assert\NotBlank
+     *
+     * @Serializer\Groups({"rating_list"})
      */
-    private Question $question;
+    private ?Question $question;
 
     public function getId(): ?string
     {
@@ -57,7 +63,7 @@ class RatingQuestion
         return $this->score;
     }
 
-    public function setScore(int $score): self
+    public function setScore(?int $score): self
     {
         $this->score = $score;
 
@@ -71,8 +77,9 @@ class RatingQuestion
 
     public function setRating(?Rating $rating): self
     {
+        $this->rating = $rating;
+
         if ($rating) {
-            $this->rating = $rating;
             $rating->addRatingQuestion($this);
         }
 
